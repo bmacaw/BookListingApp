@@ -1,27 +1,17 @@
 <resources>
     <string name="app_name">BookQuest</string>
 
-    !-- Text to display in the list when there are no books found [CHAR LIMIT=NONE] -->
-    <string name="no_books_found">No books found.</string>
-
-    <!-- Required label for searchable which is app name -->
-    <string name="app_label">Search Book Quest</string>
-
-    <!-- Required label for searchable which is app name -->
-    <string name="search_title">Search Google Books</string>
+    !-- Text to display in the list when there are no books found -->
+    <string name="no_books_found">No books found. \nUse search field and press \nsearch button to find books.</string>
 
     <!-- Hint for searchable -->
     <string name="search_hint">Enter author or title</string>
 
-    <string name="hint_search">Enter author or title</string>
-
-    <!-- Error message when there is no internet connectivity [CHAR LIMIT=NONE] -->
-    <string name="no_internet_connection">No internet connection.</string>
+    <!-- Error message when there is no internet connectivity -->
+    <string name="no_internet_connection">No internet connection</string>
 
     <!-- Text for Search Button -->
     <string name="search_button">Search</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

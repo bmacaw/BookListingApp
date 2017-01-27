@@ -1,6 +1,5 @@
 package com.example.android.booklistingapp;
 
-import android.app.Activity;
 import android.app.LoaderManager;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Context;
@@ -11,8 +10,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -24,7 +21,6 @@ import java.util.List;
 
 
 public class BookQuestActivity extends AppCompatActivity implements LoaderCallbacks<List<Book>> {
-
 
     /**
      * Constant value for the book loader ID; can choose any integer
@@ -40,21 +36,15 @@ public class BookQuestActivity extends AppCompatActivity implements LoaderCallba
      */
     private TextView mEmptyStateTextView;
 
-    private ArrayList<Book> mBookArrayList;
-    private ArrayAdapter<Book> mBookArrayAdapter;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_quest);
 
         // Find a reference to the {@link ListView} in the layout
         final ListView bookListView = (ListView) findViewById(R.id.list);
-
-        // Set the TextView to empty before user search.
-        mEmptyStateTextView = (TextView) findViewById(R.id.empty_view);
-        bookListView.setEmptyView(mEmptyStateTextView);
 
         // Create a new adapter that takes an empty list of books as input
         mAdapter = new BookAdapter(this, new ArrayList<Book>());
@@ -63,61 +53,17 @@ public class BookQuestActivity extends AppCompatActivity implements LoaderCallba
         // so the list can be populated in the user interface
         bookListView.setAdapter(mAdapter);
 
-        // TODO This code replaces previous line and needs to be fixed
 
-        /*if (mBookArrayList.size() == 0) {
-            bookListView.setEmptyView(mEmptyStateTextView);
-        } else {
-            bookListView.setAdapter(mAdapter);
-        }*/
+        // TextView to signify no books found based on search
+        mEmptyStateTextView = (TextView) findViewById(R.id.empty_view);
+        bookListView.setEmptyView(mEmptyStateTextView);
 
-        // Set a log message for the OnCreate method.
-        Log.i("On Create", "On Create");
-
-        // Get a reference to the ConnectivityManager to check state of network connectivity
-        ConnectivityManager connectivityMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        // Get details on the currently active default data network.
-        NetworkInfo activeNetwork = connectivityMgr.getActiveNetworkInfo();
-
-        if (activeNetwork != null && activeNetwork.isConnected()) {
-
-            // Get a reference to the LoaderManager, in order to interact with loaders.
-            LoaderManager loaderManager = getLoaderManager();
-
-            // Initialize the loader. Pass in the int ID constant defined above and pass in null for
-            // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
-            // because this activity implements the LoaderCallbacks interface).
-            loaderManager.initLoader(BOOK_LOADER_ID, null, BookQuestActivity.this);
-
-            //} else {
-
-            // Otherwise, display error
-            // First, hide loading indicator so error message will be visible.
-            View loadingIndicator = findViewById(R.id.loading_indicator);
-            loadingIndicator.setVisibility(View.GONE);
-
-            // Update empty state with no connection error message.
-            mEmptyStateTextView.setText(R.string.no_internet_connection);
-
-        }
 
         // mSearchEditText is the EditText where the user enters keywords for search.
         final EditText mSearchEditText = (EditText) findViewById(R.id.search_edit_text);
 
-        // TODO create onFocusChangelistener to hide keyboard after search
-        /*mSearchEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean hasFocus) {
-                if (!hasFocus) {
-                    hideKeyboard(view);
-                }
-            }
-
-        });*/
 
         // mSearchButton is the Button the user clicks to begin search.
-        // TODO perhaps change to search icon
         Button mSearchButton = (Button) findViewById(R.id.search_button);
 
         // Set a click listener on the mSearchButton.
@@ -147,6 +93,34 @@ public class BookQuestActivity extends AppCompatActivity implements LoaderCallba
                 bookListView.setAdapter(mAdapter);
             }
         });
+
+        // Get a reference to the ConnectivityManager to check state of network connectivity
+        ConnectivityManager connectivityMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        // Get details on the currently active default data network.
+        NetworkInfo activeNetwork = connectivityMgr.getActiveNetworkInfo();
+
+        if (activeNetwork != null && activeNetwork.isConnected()) {
+
+            // Get a reference to the LoaderManager, in order to interact with loaders.
+            LoaderManager loaderManager = getLoaderManager();
+
+            // Initialize the loader. Pass in the int ID constant defined above and pass in null for
+            // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
+            // because this activity implements the LoaderCallbacks interface).
+            loaderManager.initLoader(BOOK_LOADER_ID, null, BookQuestActivity.this);
+
+        } else {
+
+            // Otherwise, display error
+            // First, hide loading indicator so error message will be visible.
+            View loadingIndicator = findViewById(R.id.loading_indicator);
+            loadingIndicator.setVisibility(View.GONE);
+
+            // Update empty state with no connection error message.
+            mEmptyStateTextView.setText(R.string.no_internet_connection);
+
+        }
     }
 
     /**
@@ -192,14 +166,14 @@ public class BookQuestActivity extends AppCompatActivity implements LoaderCallba
         View loadingIndicator = findViewById(R.id.loading_indicator);
         loadingIndicator.setVisibility(View.GONE);
 
-        // Set empty state text to display "No books found."
+        // Set empty state text to prompt user for search
         mEmptyStateTextView.setText(R.string.no_books_found);
 
         // Clear the adapter of previous book data
         mAdapter.clear();
 
         // If there is a valid list of {@link Book}s, then add them to the adapters
-        // data s et. This will trigger the ListView to update.
+        // data set. This will trigger the ListView to update.
         if (books != null && !books.isEmpty()) {
             mAdapter.addAll(books);
         }
@@ -212,8 +186,4 @@ public class BookQuestActivity extends AppCompatActivity implements LoaderCallba
         mAdapter.clear();
     }
 
-    /*public void hideKeyboard(View view) {
-        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromInputMethod(view.getWindowToken(), 0);
-    }*/
 }

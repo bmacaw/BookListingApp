@@ -102,7 +102,7 @@ public final class QueryUtils {
                 urlConnection.disconnect();
             }
             if (inputStream != null) {
-                // Closing the iput stream could throw an IOException, which is why
+                // Closing the input stream could throw an IOException, which is why
                 // the makeHttpRequest(URL url) method signature specifies that an IOException
                 // could be thrown.
                 inputStream.close();
@@ -167,11 +167,6 @@ public final class QueryUtils {
                 // Extract the value for the key called "title"
                 String title = volumeInfo.getString("title");
 
-                // Extract the value for the key called "authors"
-                //String authors = new String ("authors");
-
-                // TODO this is replacement code for previous line, and needs to be fixed
-
                 String authors = "";
                 if (volumeInfo.has("authors")) {
                     JSONArray authorsArray = volumeInfo.getJSONArray("authors");
@@ -200,7 +195,7 @@ public final class QueryUtils {
             Log.e("QueryUtils", "Problem parsing the earthquake JSON results", e);
         }
 
-        // Return the list of earthquakes
+        // Return the list of books
         return books;
     }
 }
